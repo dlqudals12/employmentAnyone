@@ -1,0 +1,24 @@
+spring:
+  main:
+    web-application-type: servlet
+
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mysql://localhost:3306/security
+    username: root
+    password: 1234
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+jwt:
+  secret-key: QzQlU1lAVkpcXiFaSlxRND5cQkQyRjdGVDZIR0QjPWRFV0ZeWCJdUVZaSCk1TltBXF4=
+  token:
+    access: 86400000
+    refresh: 864000000
