@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -47,6 +48,12 @@ public class EmploymentCenter extends AllAuditingEntity {
 
     @Column(columnDefinition = "DECIMAL(16, 8) NOT NULL COMMENT '지도 좌표 lng'")
     private BigDecimal lng;
+
+    @Column(columnDefinition = "DATE NOT NULL COMMENT '시작일'")
+    private LocalDate startDate;
+
+    @Column(columnDefinition = "DATE NOT NULL COMMENT '마감일'")
+    private LocalDate endDate;
 
     @Column(columnDefinition = "VARCHAR(20) NOT NULL DEFAULT 'WAIT' COMMENT '상태 WAIT, WAIT_PERSON, COMPLETE, EXPIRE_DATE'")
     private EmploymentStatus status;
