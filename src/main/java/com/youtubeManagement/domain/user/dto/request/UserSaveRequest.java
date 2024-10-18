@@ -1,23 +1,46 @@
 package com.youtubeManagement.domain.user.dto.request;
 
+import com.youtubeManagement.data.enums.UserPermissionType;
 import com.youtubeManagement.data.enums.UserRoleType;
+import com.youtubeManagement.data.enums.UserType;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NonNull;
 
 @Getter
 public class UserSaveRequest {
-    @NonNull
+
+    @NotNull
     private String id;
 
-    @NonNull
+    @NotNull
     private String password;
 
-    @NonNull
+    @NotNull
     private String email;
 
-    @NonNull
+    @NotNull
     private String name;
 
-    @NonNull
+    @NotNull
     private UserRoleType role;
+
+    private UserPermissionType permission;
+
+    private UserType userType;
+
+    private String companyName;
+
+    private String ceo;
+
+    private String city;
+
+    private String dong;
+
+    private String address;
+
+    private String companyPhone;
+
+    private String companyPhoneSub;
+
+    private Long companyId;
 }

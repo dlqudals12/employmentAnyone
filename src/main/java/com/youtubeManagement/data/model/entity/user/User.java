@@ -1,7 +1,9 @@
 package com.youtubeManagement.data.model.entity.user;
 
-import com.youtubeManagement.data.model.entity.BaseEntity;
+import com.youtubeManagement.data.enums.UserPermissionType;
 import com.youtubeManagement.data.enums.UserRoleType;
+import com.youtubeManagement.data.enums.UserType;
+import com.youtubeManagement.data.model.entity.AllAuditingEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +13,7 @@ import lombok.*;
 @Getter
 @Builder
 @AllArgsConstructor
-public class User extends BaseEntity {
+public class User extends AllAuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +33,18 @@ public class User extends BaseEntity {
     private String userName;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(20) NOT NULL COMMENT '유저 권한 유형'")
+    private UserPermissionType permission;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(20) NOT NULL COMMENT '유저 유형'")
+    private UserType userType;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(10) NOT NULL COMMENT '유저 권한 USER, ADMIN'")
     private UserRoleType role;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
 }

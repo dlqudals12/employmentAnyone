@@ -3,11 +3,16 @@ package com.youtubeManagement.domain.user.service;
 import com.youtubeManagement.config.security.jwt.JwtProvider;
 import com.youtubeManagement.data.dto.user.CustomUserDetail;
 import com.youtubeManagement.data.enums.JwtTokenType;
+import com.youtubeManagement.data.enums.UserPermissionType;
+import com.youtubeManagement.data.enums.UserType;
+import com.youtubeManagement.data.model.entity.user.Company;
 import com.youtubeManagement.data.model.entity.user.User;
+import com.youtubeManagement.data.repository.company.CompanyRepository;
 import com.youtubeManagement.data.repository.user.UserRepository;
 import com.youtubeManagement.domain.user.dto.request.UserLoginRequest;
 import com.youtubeManagement.domain.user.dto.request.UserSaveRequest;
 import com.youtubeManagement.global.exception.DataNotFountException;
+import com.youtubeManagement.global.exception.InvalidRequestException;
 import com.youtubeManagement.global.util.CookieUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,25 +29,47 @@ import javax.naming.AuthenticationException;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final CompanyRepository companyRepository;
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder encoder;
 
     @Transactional
     public void register(UserSaveRequest userSaveRequest) {
-        userRepository.findByUserId(userSaveRequest.getId()).ifPresent(
-                user -> {
-                    throw new DataNotFountException();
-                }
-        );
+        boolean isPermissionCompany = userSaveRequest.getPermission() == UserPermissionType.COMPANY;
 
-        userRepository.save(User.builder()
-                .userId(userSaveRequest.getId())
-                .password(encoder.encode(userSaveRequest.getPassword()))
-                .userName(userSaveRequest.getName())
-                .email(userSaveRequest.getEmail())
-                .role(userSaveRequest.getRole())
-                .build());
+        Company company = null;
+        if (isPermissionCompany) {
+            companyRepository.findByName(userSaveRequest.getCompanyName()).ifPresent(
+                    value -> {
+                        throw new DataNotFountException();
+                    }
+            );
+
+            company = companyRepository.save(Company.builder()
+                    .name(userSaveRequest.getCompanyName())
+                    .ceo(userSaveRequest.getCeo())
+                    .city(userSaveRequest.getCity())
+                    .dong(userSaveRequest.getDong())
+                    .address(userSaveRequest.getAddress())
+                    .phone(userSaveRequest.getCompanyPhone())
+                    .phoneSub(userSaveRequest.getCompanyPhoneSub())
+                    .build());
+        }
+
+        register(userSaveRequest, isPermissionCompany, company);
+    }
+
+    @Transactional
+    public void registerSub(UserSaveRequest userSaveRequest) {
+        if (userSaveRequest.getPermission() != UserPermissionType.COMPANY
+                || userSaveRequest.getUserType() != UserType.SUB) {
+            throw new InvalidRequestException();
+        }
+
+        Company company = companyRepository.findById(userSaveRequest.getCompanyId()).orElseThrow(DataNotFountException::new);
+
+        register(userSaveRequest, true, company);
     }
 
     public CustomUserDetail login(UserLoginRequest userLoginRequest, HttpServletResponse response) throws AuthenticationException {
@@ -79,5 +106,22 @@ public class UserService {
 
         CookieUtils.createTokenCookies(access, response);
         CookieUtils.createTokenCookies(refresh, response);
+    }
+
+    private void register(UserSaveRequest userSaveRequest, boolean isPermissionCompany, Company company) {
+        userRepository.findByUserId(userSaveRequest.getId()).ifPresent(
+                user -> {
+                    throw new DataNotFountException();
+                }
+        );
+
+        userRepository.save(User.builder()
+                .userId(userSaveRequest.getId())
+                .password(encoder.encode(userSaveRequest.getPassword()))
+                .userName(userSaveRequest.getName())
+                .email(userSaveRequest.getEmail())
+                .role(userSaveRequest.getRole())
+                .company(isPermissionCompany ? company : null)
+                .build());
     }
 }
