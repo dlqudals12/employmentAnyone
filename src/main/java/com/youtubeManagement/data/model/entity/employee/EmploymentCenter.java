@@ -6,8 +6,7 @@ import com.youtubeManagement.data.model.entity.user.Company;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -42,6 +41,12 @@ public class EmploymentCenter extends AllAuditingEntity {
 
     @Column(columnDefinition = "MEDIUMTEXT NOT NULL COMMENT '상세설명'")
     private String contents;
+
+    @Column(columnDefinition = "DECIMAL(16, 8) NOT NULL COMMENT '지도 좌표 lat'")
+    private BigDecimal lat;
+
+    @Column(columnDefinition = "DECIMAL(16, 8) NOT NULL COMMENT '지도 좌표 lng'")
+    private BigDecimal lng;
 
     @Column(columnDefinition = "VARCHAR(20) NOT NULL DEFAULT 'WAIT' COMMENT '상태 WAIT, WAIT_PERSON, COMPLETE, EXPIRE_DATE'")
     private EmploymentStatus status;
