@@ -11,6 +11,7 @@ import com.employmentAnyone.data.repository.company.CompanyRepository;
 import com.employmentAnyone.data.repository.user.UserRepository;
 import com.employmentAnyone.domain.user.dto.request.UserLoginRequest;
 import com.employmentAnyone.domain.user.dto.request.UserSaveRequest;
+import com.employmentAnyone.domain.user.dto.request.UserUpdateRequest;
 import com.employmentAnyone.global.exception.DataNotFountException;
 import com.employmentAnyone.global.exception.InvalidRequestException;
 import com.employmentAnyone.global.util.CookieUtils;
@@ -70,6 +71,19 @@ public class UserService {
         Company company = companyRepository.findById(userSaveRequest.getCompanyId()).orElseThrow(DataNotFountException::new);
 
         register(userSaveRequest, true, company);
+    }
+
+    @Transactional
+    public void update(UserUpdateRequest userSaveRequest) {
+        User user = userRepository.findByUserId(userSaveRequest.getId()).orElseThrow(DataNotFountException::new);
+
+        User updateUser = User.builder()
+                .password(encoder.encode(userSaveRequest.getPassword()))
+                .userName(userSaveRequest.getName())
+                .email(userSaveRequest.getEmail())
+                .build();
+
+        user.update(updateUser);
     }
 
     public CustomUserDetail login(UserLoginRequest userLoginRequest, HttpServletResponse response) throws AuthenticationException {

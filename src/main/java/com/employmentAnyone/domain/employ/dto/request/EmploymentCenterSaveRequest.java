@@ -34,15 +34,15 @@ public class EmploymentCenterSaveRequest {
     private Long category1Id;
 
     @NotNull
-    private Long category1Name;
+    private String category1Name;
 
     private Long category2Id;
 
-    private Long category2Name;
+    private String category2Name;
 
     private Long category3Id;
 
-    private Long category3Name;
+    private String category3Name;
 
     @NotNull
     private BigDecimal lat;

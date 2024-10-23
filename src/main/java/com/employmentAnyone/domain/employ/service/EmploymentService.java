@@ -6,11 +6,14 @@ import com.employmentAnyone.data.repository.company.CompanyRepository;
 import com.employmentAnyone.data.repository.employee.EmploymentCategoryRepository;
 import com.employmentAnyone.data.repository.employee.EmploymentCenterRepository;
 import com.employmentAnyone.domain.employ.dto.request.EmploymentCenterSaveRequest;
+import com.employmentAnyone.domain.employ.dto.response.EmploymentCenterMapResponse;
 import com.employmentAnyone.global.exception.DataNotFountException;
 import com.employmentAnyone.global.exception.DuplicatedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +55,9 @@ public class EmploymentService {
                 .status(saveRequest.getStatus())
                 .company(company)
                 .build());
+    }
+
+    public void employments(String city, String dong) {
+        List<EmploymentCenterMapResponse> responses = employmentCenterRepository.searchAllMap(city, dong);
     }
 }

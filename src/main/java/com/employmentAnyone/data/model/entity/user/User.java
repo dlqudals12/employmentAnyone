@@ -6,6 +6,7 @@ import com.employmentAnyone.data.enums.UserType;
 import com.employmentAnyone.data.model.entity.AllAuditingEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -47,4 +48,10 @@ public class User extends AllAuditingEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     private Company company;
+
+    public void update(User updateUser) {
+        if(StringUtils.hasLength(updateUser.getUserName())) this.userName = updateUser.getUserName();
+        if(StringUtils.hasLength(updateUser.getPassword())) this.password = updateUser.getPassword();
+        if(StringUtils.hasLength(updateUser.getEmail())) this.email = updateUser.getEmail();
+    }
 }

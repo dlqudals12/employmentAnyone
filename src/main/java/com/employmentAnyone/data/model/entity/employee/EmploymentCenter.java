@@ -46,20 +46,20 @@ public class EmploymentCenter extends AllAuditingEntity {
     @Column(columnDefinition = "BIGINT NOT NULL COMMENT '첫 번째 카테고리 ID'")
     private Long category1Id;
 
-    @Column(columnDefinition = "BIGINT NOT NULL COMMENT '첫 번째 카테고리 이름'")
-    private Long category1Name;
+    @Column(columnDefinition = "VARCHAR(50) NOT NULL COMMENT '첫 번째 카테고리 이름'")
+    private String category1Name;
 
     @Column(columnDefinition = "BIGINT NULL COMMENT '두 번째 카테고리 ID'")
     private Long category2Id;
 
-    @Column(columnDefinition = "BIGINT NULL COMMENT '두 번째 카테고리 이름'")
-    private Long category2Name;
+    @Column(columnDefinition = "VARCHAR(50) NULL COMMENT '두 번째 카테고리 이름'")
+    private String category2Name;
 
     @Column(columnDefinition = "BIGINT NULL COMMENT '세 번째 카테고리 ID'")
     private Long category3Id;
 
-    @Column(columnDefinition = "BIGINT NULL COMMENT '세 번째 카테고리 이름'")
-    private Long category3Name;
+    @Column(columnDefinition = "VARCHAR(50) NULL COMMENT '세 번째 카테고리 이름'")
+    private String category3Name;
 
     @Column(columnDefinition = "DECIMAL(16, 8) NOT NULL COMMENT '지도 좌표 lat'")
     private BigDecimal lat;

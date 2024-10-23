@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,15 @@ public class AuthController {
     @PostMapping("/register")
     public SuccessResponse<Object> register(@RequestBody UserSaveRequest userSaveRequest) {
         userService.register(userSaveRequest);
+        return SuccessResponse.ok();
+    }
+
+    @Secured({"ROLE_MASTER"})
+    @Operation(summary = "회원 가입 (sub)", description = "회원 가입 (sub)")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @PostMapping("/register/sub")
+    public SuccessResponse<Object> registerSub(@RequestBody UserSaveRequest userSaveRequest) {
+        userService.registerSub(userSaveRequest);
         return SuccessResponse.ok();
     }
 
